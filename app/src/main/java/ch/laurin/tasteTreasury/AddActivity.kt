@@ -3,16 +3,16 @@ package ch.laurin.tasteTreasury
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ch.laurin.tasteTreasury.ui.theme.TastetreasuryTheme
@@ -26,43 +26,62 @@ class AddActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    CardMinimalExample()
+                    RecipeFormWithButton()
                 }
             }
         }
     }
 }
 
+
+
 @Composable
-fun CardMinimalExample() {
+fun RecipeFormWithButton() {
+    var nameText by rememberSaveable { mutableStateOf("") }
+    var descriptionText by rememberSaveable { mutableStateOf("") }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(30.dp)
+            .padding(32.dp)
     ) {
-        Card(
+        Image(
+            painter = painterResource(id = R.drawable.ic_launcher_background),
+            contentDescription = null,
             modifier = Modifier
-                .weight(1f)
                 .fillMaxWidth()
-                .padding(bottom = 30.dp)
-        ) {
-            Text(text = "Hello, world!")
-        }
+                .height(200.dp)
+                .clip(RoundedCornerShape(5.dp)),
+            contentScale = ContentScale.Crop
+        )
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        OutlinedTextField(
+            value = nameText,
+            onValueChange = { nameText = it },
+            label = { Text("Name") },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        OutlinedTextField(
+            value = descriptionText,
+            onValueChange = { descriptionText = it },
+            label = { Text("Description") },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.height(20.dp))
 
         Button(
             onClick = { /* TODO */ },
             modifier = Modifier
                 .fillMaxWidth()
-                .height(56.dp)
-                .background(
-                    color = MaterialTheme.colorScheme.primary,
-                    shape = RoundedCornerShape(16.dp)
-                )
+                .height(50.dp)
         ) {
-            Text(
-                text = "Save Recipe",
-                color = MaterialTheme.colorScheme.onPrimary
-            )
+            Text(text = "Save Recipe", color = MaterialTheme.colorScheme.onPrimary)
         }
     }
 }
@@ -75,7 +94,7 @@ fun GreetingPreview() {
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            CardMinimalExample()
+            RecipeFormWithButton()
         }
     }
 }
