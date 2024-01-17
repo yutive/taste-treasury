@@ -1,5 +1,7 @@
 package ch.laurin.tasteTreasury
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -16,6 +18,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ch.laurin.tasteTreasury.ui.theme.TastetreasuryTheme
@@ -29,7 +32,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    AddButton(onClick = { Log.d("FAB", "FAB clicked.") })
+                    NavigateToAddRecipe(onClick = { Log.d("FAB", "FAB clicked.") })
                 }
             }
         }
@@ -37,9 +40,12 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun AddButton(onClick: () -> Unit) {
+fun NavigateToAddRecipe(onClick: () -> Unit) {
+    val activity = LocalContext.current as Activity
     LargeFloatingActionButton(
-        onClick = { onClick() },
+        onClick = {
+            activity.startActivity(Intent(activity, AddActivity::class.java))
+        },
         modifier = Modifier
             .padding(20.dp)
             .wrapContentSize(align = Alignment.BottomEnd)
@@ -50,11 +56,11 @@ fun AddButton(onClick: () -> Unit) {
 
 @Preview(showBackground = true)
 @Composable
-fun AddButtonPreview() {
+fun NavigateToAddRecipePreview() {
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
-        AddButton(onClick = { Log.d("FAB", "FAB clicked.") })
+        NavigateToAddRecipe(onClick = { Log.d("FAB", "FAB clicked.") })
     }
 }
