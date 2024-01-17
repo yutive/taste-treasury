@@ -1,5 +1,7 @@
 package ch.laurin.tasteTreasury
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -12,6 +14,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -37,6 +40,7 @@ class AddActivity : ComponentActivity() {
 
 @Composable
 fun RecipeFormWithButton() {
+    val activity = LocalContext.current as Activity
     var nameText by rememberSaveable { mutableStateOf("") }
     var descriptionText by rememberSaveable { mutableStateOf("") }
 
@@ -55,7 +59,7 @@ fun RecipeFormWithButton() {
             contentScale = ContentScale.Crop
         )
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
         OutlinedTextField(
             value = nameText,
@@ -64,7 +68,7 @@ fun RecipeFormWithButton() {
             modifier = Modifier.fillMaxWidth()
         )
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
         OutlinedTextField(
             value = descriptionText,
@@ -73,10 +77,10 @@ fun RecipeFormWithButton() {
             modifier = Modifier.fillMaxWidth()
         )
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
         Button(
-            onClick = { /* TODO */ },
+            onClick = { activity.startActivity(Intent(activity, MainActivity::class.java))},
             modifier = Modifier
                 .fillMaxWidth()
                 .height(50.dp)
