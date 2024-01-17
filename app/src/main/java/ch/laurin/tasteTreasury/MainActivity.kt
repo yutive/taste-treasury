@@ -3,7 +3,6 @@ package ch.laurin.tasteTreasury
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -32,7 +31,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    NavigateToAddRecipe(onClick = { Log.d("FAB", "FAB clicked.") })
+                    NavigateToAddRecipe()
                 }
             }
         }
@@ -40,7 +39,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun NavigateToAddRecipe(onClick: () -> Unit) {
+fun NavigateToAddRecipe() {
     val activity = LocalContext.current as Activity
     LargeFloatingActionButton(
         onClick = {
@@ -61,6 +60,6 @@ fun NavigateToAddRecipePreview() {
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
-        NavigateToAddRecipe(onClick = { Log.d("FAB", "FAB clicked.") })
+        NavigateToAddRecipe()
     }
 }
