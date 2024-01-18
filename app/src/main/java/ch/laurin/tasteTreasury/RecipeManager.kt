@@ -1,5 +1,5 @@
 // RecipeManager.kt
-import ch.laurin.tasteTreasury.Recipe
+import ch.laurin.tasteTreasury.data.Recipe
 
 class RecipeManager {
     private val recipes: MutableList<Recipe> = mutableListOf()

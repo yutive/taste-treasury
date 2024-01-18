@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import ch.laurin.tasteTreasury.data.Recipe
 import ch.laurin.tasteTreasury.ui.theme.TastetreasuryTheme
 
 class MainActivity : ComponentActivity() {
@@ -40,14 +41,16 @@ fun MainContent(recipeManager: RecipeManager) {
         recipeManager.addRecipe(
             Recipe(
                 name = "Recipe 1",
-                description = "Description for Recipe 1"
+                description = "Description for Recipe 1",
+                id = 0
             )
         )
 
         recipeManager.addRecipe(
             Recipe(
                 name = "Recipe 2",
-                description = "Description for Recipe 2"
+                description = "Description for Recipe 2",
+                id = 1
             )
         )
         RecipeList(recipes = recipeManager.getRecipes())
