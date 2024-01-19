@@ -37,8 +37,8 @@ class MainActivity : ComponentActivity() {
 fun MainContent(recipeListViewModel: RecipeListViewModel) {
     var recipes by remember { mutableStateOf(emptyList<Recipe>()) }
 
-    LaunchedEffect(recipeListViewModel) {
-        recipes = recipeListViewModel.getRecipes()
+    LaunchedEffect(recipeListViewModel.recipes) {
+        recipes = recipeListViewModel.recipes.value!!
     }
 
     Surface(
@@ -49,4 +49,3 @@ fun MainContent(recipeListViewModel: RecipeListViewModel) {
         AddButton()
     }
 }
-

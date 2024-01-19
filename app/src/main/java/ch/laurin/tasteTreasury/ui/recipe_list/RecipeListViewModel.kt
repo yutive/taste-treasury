@@ -1,17 +1,20 @@
-package ch.laurin.tasteTreasury.ui.recipe_list// ch.laurin.tasteTreasury.ui.recipe_list.RecipeListViewModel.kt
+package ch.laurin.tasteTreasury.ui.recipe_list
+
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ch.laurin.tasteTreasury.data.Recipe
 
 class RecipeListViewModel : ViewModel() {
-    private val recipes: MutableList<Recipe> = mutableListOf()
+
+    private val _recipes = MutableLiveData<List<Recipe>>()
+    val recipes: LiveData<List<Recipe>> get() = _recipes
 
     init {
-        // Initialize with data
         addRecipe(
             Recipe(
                 name = "Recipe 1",
                 description = "Description for Recipe 1",
-                id = 0
             )
         )
 
@@ -19,16 +22,11 @@ class RecipeListViewModel : ViewModel() {
             Recipe(
                 name = "Recipe 2",
                 description = "Description for Recipe 2",
-                id = 1
             )
         )
     }
 
     fun addRecipe(recipe: Recipe) {
-        recipes.add(recipe)
-    }
-
-    fun getRecipes(): List<Recipe> {
-        return recipes.toList()
+        _recipes.value = _recipes.value.orEmpty() + recipe
     }
 }
