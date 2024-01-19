@@ -17,10 +17,10 @@ import ch.laurin.tasteTreasury.AddActivity
 
 @Composable
 fun AddButton() {
-    val activity = LocalContext.current as Activity
+    val context = LocalContext.current as Activity
     LargeFloatingActionButton(
         onClick = {
-            activity.startActivity(Intent(activity, AddActivity::class.java))
+            context.startActivity(Intent(context, AddActivity::class.java))
         },
         modifier = Modifier
             .padding(20.dp)
