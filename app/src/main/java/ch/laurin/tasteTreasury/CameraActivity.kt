@@ -9,10 +9,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.core.content.ContextCompat
+import ch.laurin.tasteTreasury.ui.camera.CameraPreviewScreen
 import ch.laurin.tasteTreasury.ui.theme.TastetreasuryTheme
 
 class CameraActivity : ComponentActivity() {
@@ -20,9 +19,9 @@ class CameraActivity : ComponentActivity() {
     private val cameraPermissionRequest =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             if (isGranted) {
-                // Implement camera related  code
+                setCameraPreview()
             } else {
-                // Camera permission denied (Handle denied operation)
+                // Camera permission denied
             }
 
         }
@@ -35,16 +34,15 @@ class CameraActivity : ComponentActivity() {
                 this,
                 Manifest.permission.CAMERA
             ) -> {
-                // Camera permission already granted
-                // Implement camera related code
+                setCameraPreview()
             }
             else -> {
                 cameraPermissionRequest.launch(Manifest.permission.CAMERA)
             }
         }
 
-
-
+    }
+    private fun setCameraPreview() {
         setContent {
             TastetreasuryTheme {
                 // A surface container using the 'background' color from the theme
@@ -52,17 +50,9 @@ class CameraActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting("Android")
+                    CameraPreviewScreen()
                 }
             }
         }
     }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
 }
