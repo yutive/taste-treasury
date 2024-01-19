@@ -1,14 +1,21 @@
 package ch.laurin.tasteTreasury.ui.recipe_list
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ch.laurin.tasteTreasury.data.Recipe
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+
+data class RecipeUiState(
+    val recipes: MutableList<Recipe>? = null
+)
 
 class RecipeListViewModel : ViewModel() {
 
-    private val _recipes = MutableLiveData<List<Recipe>>()
-    val recipes: LiveData<List<Recipe>> get() = _recipes
+    private val _uiState = MutableStateFlow(RecipeUiState())
+    val uiState: StateFlow<RecipeUiState> = _uiState.asStateFlow()
+
 
     init {
         addRecipe(
@@ -26,7 +33,13 @@ class RecipeListViewModel : ViewModel() {
         )
     }
 
+    // Handle business logic
     fun addRecipe(recipe: Recipe) {
-        _recipes.value = _recipes.value.orEmpty() + recipe
+        _uiState.update { currentState ->
+            val updatedRecipes = currentState.recipes?.toMutableList() ?: mutableListOf()
+            updatedRecipes.add(recipe)
+            currentState.copy(recipes = updatedRecipes)
+        }
     }
+
 }

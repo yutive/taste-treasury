@@ -1,17 +1,15 @@
 package ch.laurin.tasteTreasury
 
-import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -33,7 +31,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat
 import ch.laurin.tasteTreasury.data.Recipe
 import ch.laurin.tasteTreasury.ui.recipe_list.RecipeListViewModel
 import ch.laurin.tasteTreasury.ui.theme.TastetreasuryTheme
@@ -41,7 +38,7 @@ import kotlinx.coroutines.launch
 
 class AddActivity : ComponentActivity() {
 
-    private val recipeListViewModel = RecipeListViewModel()
+    private val recipeListViewModel: RecipeListViewModel by viewModels()
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
