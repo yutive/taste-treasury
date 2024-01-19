@@ -14,14 +14,10 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -32,6 +28,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import ch.laurin.tasteTreasury.data.Recipe
+import ch.laurin.tasteTreasury.ui.recipe_add.RecipeDescriptionTextField
+import ch.laurin.tasteTreasury.ui.recipe_add.RecipeNameTextField
+import ch.laurin.tasteTreasury.ui.recipe_add.SaveRecipeButton
+import ch.laurin.tasteTreasury.ui.recipe_add.TakePictureButton
 import ch.laurin.tasteTreasury.ui.recipe_list.RecipeListViewModel
 import ch.laurin.tasteTreasury.ui.theme.TastetreasuryTheme
 import kotlinx.coroutines.launch
@@ -63,8 +63,6 @@ fun RecipeFormWithButton(recipeViewModel: RecipeListViewModel) {
     var nameText by remember { mutableStateOf("") }
     var descriptionText by remember { mutableStateOf("") }
     val coroutineScope = rememberCoroutineScope()
-
-    // Get the Vibrator instance directly from the Context
     val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
     Column(
@@ -72,69 +70,53 @@ fun RecipeFormWithButton(recipeViewModel: RecipeListViewModel) {
             .fillMaxSize()
             .padding(32.dp)
     ) {
+        Spacer(modifier = Modifier.height(16.dp))
+        RecipeNameTextField(nameText) { nameText = it }
 
         Spacer(modifier = Modifier.height(16.dp))
-
-        OutlinedTextField(
-            value = nameText,
-            onValueChange = { nameText = it },
-            label = { Text("Name") },
-            modifier = Modifier.fillMaxWidth()
-        )
+        RecipeDescriptionTextField(descriptionText) { descriptionText = it }
 
         Spacer(modifier = Modifier.height(16.dp))
-
-        OutlinedTextField(
-            value = descriptionText,
-            onValueChange = { descriptionText = it },
-            label = { Text("Description") },
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Button(
-            onClick = {
-                coroutineScope.launch {
-                    recipeViewModel.addRecipe(
-                        Recipe(
-                            name = nameText,
-                            description = descriptionText,
-                        )
-                    )
-                    val timing = 50L
-                    vibrator.vibrate(VibrationEffect.createOneShot(timing, VibrationEffect.DEFAULT_AMPLITUDE))
-                    context.startActivity(Intent(context, CameraActivity::class.java))
-                }
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(50.dp)
-        ) {
-            Text(text = "Take Picture", color = MaterialTheme.colorScheme.onPrimary)
+        TakePictureButton {
+            coroutineScope.launch {
+                onTakePictureClicked(recipeViewModel, nameText, descriptionText, vibrator, context)
+            }
         }
 
         Spacer(modifier = Modifier.height(16.dp))
-
-        Button(
-            onClick = {
-                coroutineScope.launch {
-                    recipeViewModel.addRecipe(
-                        Recipe(
-                            name = nameText,
-                            description = descriptionText,
-                        )
-                    )
-                    val timing = 50L
-                    vibrator.vibrate(VibrationEffect.createOneShot(timing, VibrationEffect.DEFAULT_AMPLITUDE))
-                    context.finish()
-                }
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(50.dp)
-        ) {
-            Text(text = "Save Recipe", color = MaterialTheme.colorScheme.onPrimary)
+        SaveRecipeButton {
+            coroutineScope.launch {
+                onSaveRecipeClicked(recipeViewModel, nameText, descriptionText, vibrator, context)
+            }
         }
     }
 }
+
+@RequiresApi(Build.VERSION_CODES.O)
+private fun onTakePictureClicked(
+    recipeViewModel: RecipeListViewModel,
+    name: String,
+    description: String,
+    vibrator: Vibrator,
+    context: Context
+) {
+    recipeViewModel.addRecipe(Recipe(name = name, description = description))
+    val timing = 50L
+    vibrator.vibrate(VibrationEffect.createOneShot(timing, VibrationEffect.DEFAULT_AMPLITUDE))
+    context.startActivity(Intent(context, CameraActivity::class.java))
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+private fun onSaveRecipeClicked(
+    recipeViewModel: RecipeListViewModel,
+    name: String,
+    description: String,
+    vibrator: Vibrator,
+    context: Context
+) {
+    recipeViewModel.addRecipe(Recipe(name = name, description = description))
+    val timing = 50L
+    vibrator.vibrate(VibrationEffect.createOneShot(timing, VibrationEffect.DEFAULT_AMPLITUDE))
+    (context as? Activity)?.finish()
+}
+
