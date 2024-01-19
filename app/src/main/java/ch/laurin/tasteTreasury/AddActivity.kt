@@ -61,15 +61,7 @@ fun RecipeFormWithButton() {
             .fillMaxSize()
             .padding(32.dp)
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.ic_launcher_background),
-            contentDescription = null,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(200.dp)
-                .clip(RoundedCornerShape(5.dp)),
-            contentScale = ContentScale.Crop
-        )
+
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -110,7 +102,6 @@ fun GreetingPreview() {
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            RecipeFormWithButton()
         }
     }
 }

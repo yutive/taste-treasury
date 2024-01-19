@@ -7,6 +7,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.*
@@ -60,11 +63,12 @@ fun MainContent(recipeManager: RecipeManager) {
 
 @Composable
 fun RecipeList(recipes: MutableList<Recipe>) {
-    Column (
+    LazyColumn (
+        state = rememberLazyListState(),
         modifier = Modifier.padding(32.dp)
     ){
-        recipes.forEach { recipe ->
-            RecipeListItem(recipe = recipe)
+        items(recipes) {recipe ->
+            RecipeListItem(recipe)
         }
     }
 }
