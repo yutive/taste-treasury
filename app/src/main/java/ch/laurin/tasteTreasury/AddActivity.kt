@@ -1,10 +1,15 @@
 package ch.laurin.tasteTreasury
 
 import android.app.Activity
-import android.content.Intent
+import android.content.Context
+import android.os.Build
 import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
+import android.os.VibratorManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,14 +24,22 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import ch.laurin.tasteTreasury.data.Recipe
+import ch.laurin.tasteTreasury.ui.recipe_list.RecipeListViewModel
 import ch.laurin.tasteTreasury.ui.theme.TastetreasuryTheme
+import kotlinx.coroutines.launch
 
 class AddActivity : ComponentActivity() {
+
+    private val recipeListViewModel = RecipeListViewModel()
+
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -35,20 +48,23 @@ class AddActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    RecipeFormWithButton()
+                    RecipeFormWithButton(recipeListViewModel)
                 }
             }
         }
     }
 }
 
-
-
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun RecipeFormWithButton() {
-    val activity = LocalContext.current as Activity
-    var nameText by rememberSaveable { mutableStateOf("") }
-    var descriptionText by rememberSaveable { mutableStateOf("") }
+fun RecipeFormWithButton(recipeViewModel: RecipeListViewModel) {
+    val context = LocalContext.current as Activity
+    var nameText by remember { mutableStateOf("") }
+    var descriptionText by remember { mutableStateOf("") }
+    val coroutineScope = rememberCoroutineScope()
+
+    // Get the Vibrator instance directly from the Context
+    val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
     Column(
         modifier = Modifier
@@ -77,7 +93,19 @@ fun RecipeFormWithButton() {
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
-            onClick = { activity.startActivity(Intent(activity, MainActivity::class.java))},
+            onClick = {
+                coroutineScope.launch {
+                    recipeViewModel.addRecipe(
+                        Recipe(
+                            name = nameText,
+                            description = descriptionText,
+                        )
+                    )
+                    val timing = 50L
+                    vibrator.vibrate(VibrationEffect.createOneShot(timing, VibrationEffect.DEFAULT_AMPLITUDE))
+                    context.finish()
+                }
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(50.dp)
