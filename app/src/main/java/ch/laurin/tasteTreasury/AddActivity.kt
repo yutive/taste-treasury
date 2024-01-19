@@ -1,5 +1,6 @@
 package ch.laurin.tasteTreasury
 
+import MainActivity
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
@@ -62,7 +63,6 @@ fun RecipeFormWithButton() {
             .padding(32.dp)
     ) {
 
-
         Spacer(modifier = Modifier.height(16.dp))
 
         OutlinedTextField(
@@ -90,18 +90,6 @@ fun RecipeFormWithButton() {
                 .height(50.dp)
         ) {
             Text(text = "Save Recipe", color = MaterialTheme.colorScheme.onPrimary)
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    TastetreasuryTheme {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
-        ) {
         }
     }
 }
